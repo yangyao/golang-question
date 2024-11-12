@@ -28,6 +28,9 @@ var conf = config.Local[Config]().Watch().InitData(Config{
 })
 
 func main() {
+	conf.OnChange(func(c Config) {
+		fmt.Printf("on change: %+v \n", c)
+	})
 	s := conf.Get().Secret
 	if err := s.Validate(); err != nil {
 		fmt.Printf("validate error: %+v\n", err)
@@ -35,4 +38,6 @@ func main() {
 	if err := conf.Update(Config{Secret: Secret("updated secret")}); err != nil {
 		fmt.Printf("update error: %+v\n", err)
 	}
+	// print out updated config
+	fmt.Printf("current config: %+v\n", conf.Get())
 }
